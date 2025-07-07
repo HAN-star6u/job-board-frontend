@@ -11,10 +11,25 @@
       max-width: 700px;
       margin: 30px auto;
       padding: 20px;
+      position: relative;
     }
     h1 {
       color: #0047ab;
       text-align: center;
+      margin-bottom: 50px;
+    }
+    #pricing-badge {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      background: #0047ab;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 0.95em;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      z-index: 1000;
     }
     #job-list > div {
       background: white;
@@ -40,6 +55,9 @@
       border-radius: 5px;
       cursor: pointer;
       transition: background-color 0.3s ease;
+      display: block;
+      margin: 0 auto;
+      margin-top: 20px;
     }
     button:hover {
       background-color: #002f6c;
@@ -53,15 +71,17 @@
   </style>
 </head>
 <body>
+  <div id="pricing-badge">Pricing: $15 for 30 days | $30 for 60 days</div>
+
   <h1>Job Board</h1>
   <div id="job-list">Loading jobs...</div>
 
   <a href="post.html">
-    <button>Post a Job ($15 for 30 days)</button>
+    <button>Post a Job</button>
   </a>
 
   <script>
-    const BACKEND_URL = "postgresql://hjobs_user:3vgp9XDEUiMk5r3QGid9KxD0X0038ewW@dpg-d1lehsur433s73dl50hg-a.oregon-postgres.render.com/hjobs";
+    const BACKEND_URL = "https://your-backend-url.onrender.com";
 
     async function loadJobs() {
       try {
@@ -69,7 +89,6 @@
         let jobs = await res.json();
 
         const now = new Date();
-        // Filter jobs to only show those that expire in the future
         jobs = jobs.filter(job => new Date(job.expiresAt) > now);
 
         const container = document.getElementById("job-list");
