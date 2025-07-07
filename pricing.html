@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pricing</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #eef2f8;
+      padding: 40px;
+      text-align: center;
+    }
+    .plan {
+      background: white;
+      border-radius: 8px;
+      padding: 30px;
+      margin: 20px auto;
+      max-width: 400px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .plan h2 {
+      color: #0047ab;
+    }
+    .plan p {
+      font-size: 1em;
+      color: #444;
+      margin: 20px 0;
+    }
+    .plan button {
+      padding: 12px 20px;
+      font-size: 1em;
+      background: #0047ab;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .plan button:hover {
+      background: #002d6d;
+    }
+  </style>
+</head>
+<body>
+  <h1>Choose a Job Posting Plan</h1>
+
+  <div class="plan">
+    <h2>$15 for 30 Days</h2>
+    <p>Post 1 job listing that expires after 30 days.</p>
+    <button onclick="startForm(30)">Select</button>
+  </div>
+
+  <div class="plan">
+    <h2>$30 for 60 Days</h2>
+    <p>Post a job that lasts 60 days and may include more features later.</p>
+    <button onclick="startForm(60)">Select</button>
+  </div>
+
+  <script>
+    function startForm(days) {
+      window.location.href = `form.html?plan=${days}`;
+    }
+  </script>
+</body>
+</html>
