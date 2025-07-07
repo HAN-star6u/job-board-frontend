@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Job Questions</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4f9;
+      padding: 20px;
+    }
+    form {
+      background: white;
+      max-width: 600px;
+      margin: 30px auto;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #0047ab;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    .warning {
+      margin-top: 20px;
+      padding: 12px;
+      background: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeeba;
+      border-radius: 6px;
+    }
+    button {
+      margin-top: 20px;
+      width: 100%;
+      background: #0047ab;
+      color: white;
+      padding: 14px;
+      font-size: 1.1em;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #002d6d;
+    }
+  </style>
+</head>
+<body>
+  <form id="job-form">
+    <h1>Job Listing Questions</h1>
+
+    <label>1. What is the name of the company you're currently working at?</label>
+    <input name="company" required>
+
+    <label>2. What job skill are you looking for?</label>
+    <input name="skills" required>
+
+    <label>3. Remote or in person?</label>
+    <input name="type" required>
+
+    <label>4. What college did you attend?</label>
+    <input name="college" required>
+
+    <label>5. What is your full name?</label>
+    <input name="fullname" required>
+
+    <div class="warning">
+      🛑 This is what will show on the job listing. Answer clearly or your job will be deleted.
+    </div>
+
+    <label>6. Tell us what job you are looking for</label>
+    <textarea name="jobdesc" rows="3" required></textarea>
+
+    <label>7. Phone number</label>
+    <input name="phone" type="tel" required>
+
+    <label>8. Email address</label>
+    <input name="email" type="email" required>
+
+    <button type="submit">Continue to Payment</button>
+  </form>
+
+  <script>
+    document.getElementById("job-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const plan = new URLSearchParams(window.location.search).get("plan");
+      if (!plan) return alert("Missing plan!");
+
+      const formData = new FormData(this);
+      const jobInfo = {};
+      for (const [key, value] of formData.entries()) {
+        jobInfo[key] = value;
+      }
+
+      localStorage.setItem("jobData", JSON.stringify({ ...jobInfo, plan }));
+
+      // redirect to Stripe payment based on plan
+      const stripeLink =
+        plan === "60"
+          ? "https://buy.stripe.com/test_30DAY_LINK" // 🔁 replace with real 60-day link
+          : "https://buy.stripe.com/test_00wcN458kaXw7HrcDxco000"; // 30-day link you provided
+
+      window.location.href = stripeLink;
+    });
+  </script>
+</body>
+</html>
