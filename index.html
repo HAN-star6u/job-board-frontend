@@ -73,8 +73,9 @@
   <header>
     <h1>Job Board</h1>
     <div class="controls">
-      <button onclick="window.location.href='post.html?plan=30'">Post a Job</button>
-      <button onclick="alert('Plans:\\n$15 – 30 days\\n$30 – 60 days')">Pricing</button>
+      <!-- 👉 Here are your control buttons -->
+      <button onclick="window.location.href='https://buy.stripe.com/test_00wcN458kaXw7HrcDxco000?plan=30'">Post a Job</button>
+      <button onclick="alert('Pricing Plans:\n\n$15 – 30 days\n$30 – 60 days')">Pricing</button>
     </div>
   </header>
 
@@ -82,6 +83,7 @@
 
   <script>
     const BACKEND_URL = "https://your-backend-url.onrender.com";
+
     async function loadJobs() {
       try {
         const res = await fetch(`${BACKEND_URL}/jobs`);
@@ -98,6 +100,7 @@
         document.getElementById('job-list').innerText = 'Error loading job listings.';
       }
     }
+
     loadJobs();
   </script>
 </body>
