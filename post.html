@@ -13,18 +13,41 @@
       padding: 20px;
       position: relative;
     }
-    #pricing-badge {
+    /* Pricing button top right */
+    #pricing-container {
       position: fixed;
       top: 15px;
       right: 15px;
+      z-index: 1000;
+    }
+    #pricing-button {
       background: #0047ab;
       color: white;
+      border: none;
       padding: 10px 15px;
       border-radius: 8px;
       font-weight: bold;
+      cursor: pointer;
       font-size: 0.95em;
       box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-      z-index: 1000;
+    }
+    #pricing-popup {
+      display: none;
+      margin-top: 8px;
+      background: white;
+      color: #0047ab;
+      padding: 12px 18px;
+      border-radius: 8px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+      white-space: nowrap;
+      font-weight: normal;
+      font-size: 0.9em;
+      user-select: none;
+      min-width: 160px;
+    }
+    /* Show popup when active */
+    #pricing-popup.show {
+      display: block;
     }
     h1 {
       color: #0047ab;
@@ -46,7 +69,7 @@
       font-size: 1em;
       box-sizing: border-box;
     }
-    button {
+    button[type="submit"] {
       width: 100%;
       background-color: #0047ab;
       color: white;
@@ -57,13 +80,19 @@
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
-    button:hover {
+    button[type="submit"]:hover {
       background-color: #002f6c;
     }
   </style>
 </head>
 <body>
-  <div id="pricing-badge">Pricing: $15 for 30 days | $30 for 60 days</div>
+  <div id="pricing-container">
+    <button id="pricing-button" aria-expanded="false" aria-controls="pricing-popup" aria-haspopup="true">Pricing</button>
+    <div id="pricing-popup" role="region" aria-live="polite">
+      $15 for 30 days<br />
+      $30 for 60 days
+    </div>
+  </div>
 
   <h1>Submit a Job</h1>
   <form id="job-form">
@@ -78,6 +107,21 @@
   </form>
 
   <script>
+    const pricingBtn = document.getElementById("pricing-button");
+    const pricingPopup = document.getElementById("pricing-popup");
+
+    pricingBtn.addEventListener("click", () => {
+      const isVisible = pricingPopup.classList.toggle("show");
+      pricingBtn.setAttribute("aria-expanded", isVisible);
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!pricingBtn.contains(e.target) && !pricingPopup.contains(e.target)) {
+        pricingPopup.classList.remove("show");
+        pricingBtn.setAttribute("aria-expanded", false);
+      }
+    });
+
     const BACKEND_URL = "https://your-backend-url.onrender.com";
 
     document.getElementById("job-form").addEventListener("submit", async (e) => {
@@ -111,10 +155,6 @@
         console.error(err);
         alert("Error submitting the job.");
       }
-    });
-  </script>
-</body>
-</html>
     });
   </script>
 </body>
