@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Job Questions</title>
+  <title>Post a Job - Green Job Board</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f0f4f9;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f4f9f4;
       padding: 20px;
+      color: #2c7a2c;
     }
     form {
       background: white;
@@ -19,103 +20,136 @@
     }
     h1 {
       text-align: center;
-      color: #0047ab;
+      margin-bottom: 25px;
     }
     label {
       display: block;
       margin-top: 15px;
-      font-weight: bold;
+      font-weight: 600;
     }
     input, textarea {
       width: 100%;
       padding: 10px;
       margin-top: 5px;
-      font-size: 1em;
+      font-size: 1rem;
       border: 1px solid #ccc;
       border-radius: 6px;
+      color: #333;
+    }
+    textarea {
+      resize: vertical;
     }
     .warning {
-      margin-top: 20px;
-      padding: 12px;
       background: #fff3cd;
       color: #856404;
       border: 1px solid #ffeeba;
       border-radius: 6px;
+      padding: 12px;
+      margin-top: 20px;
+      font-weight: bold;
+      font-style: italic;
     }
     button {
-      margin-top: 20px;
+      margin-top: 25px;
       width: 100%;
-      background: #0047ab;
+      background: #2c7a2c;
       color: white;
       padding: 14px;
-      font-size: 1.1em;
+      font-size: 1.2rem;
       border: none;
       border-radius: 8px;
       cursor: pointer;
+      transition: background 0.3s;
     }
     button:hover {
-      background: #002d6d;
+      background: #1b4c1b;
     }
   </style>
 </head>
 <body>
+
   <form id="job-form">
-    <h1>Job Listing Questions</h1>
+    <h1>Post Your Job Listing</h1>
+    
+    <div id="plan-info" style="text-align:center; margin-bottom: 20px; font-weight: bold;"></div>
 
     <label>1. What is the name of the company you're currently working at?</label>
-    <input name="company" required>
+    <input name="company" required />
 
     <label>2. What job skill are you looking for?</label>
-    <input name="skills" required>
+    <input name="skills" required />
 
     <label>3. Remote or in person?</label>
-    <input name="type" required>
+    <input name="type" required />
 
     <label>4. What college did you attend?</label>
-    <input name="college" required>
+    <input name="college" required />
 
     <label>5. What is your full name?</label>
-    <input name="fullname" required>
+    <input name="fullname" required />
 
     <div class="warning">
-      🛑 This is what will show on the job listing. Answer clearly or your job will be deleted.
+      🛑 This is what will show on the job listing. Please answer clearly or your job will be deleted.
     </div>
 
     <label>6. Tell us what job you are looking for</label>
-    <textarea name="jobdesc" rows="3" required></textarea>
+    <textarea name="jobdesc" rows="4" required></textarea>
 
     <label>7. Phone number</label>
-    <input name="phone" type="tel" required>
+    <input name="phone" type="tel" required />
 
     <label>8. Email address</label>
-    <input name="email" type="email" required>
+    <input name="email" type="email" required />
 
     <button type="submit">Continue to Payment</button>
   </form>
 
   <script>
-    document.getElementById("job-form").addEventListener("submit", function (e) {
+    // Show selected plan info from query params
+    const params = new URLSearchParams(window.location.search);
+    const price = params.get('price');
+    const days = params.get('days');
+    const maxPosts = params.get('maxPosts');
+
+    const planInfo = document.getElementById('plan-info');
+    if(price && days && maxPosts) {
+      planInfo.textContent = `Selected Plan: $${price} for up to ${maxPosts} job post(s), valid for ${days} day(s).`;
+    } else {
+      planInfo.textContent = 'No pricing plan selected. Please select a plan first.';
+    }
+
+    document.getElementById('job-form').addEventListener('submit', (e) => {
       e.preventDefault();
 
-      const plan = new URLSearchParams(window.location.search).get("plan");
-      if (!plan) return alert("Missing plan!");
-
-      const formData = new FormData(this);
-      const jobInfo = {};
-      for (const [key, value] of formData.entries()) {
-        jobInfo[key] = value;
+      if(!price || !days || !maxPosts) {
+        alert('Pricing plan missing. Please go back and select a plan.');
+        return;
       }
 
-      localStorage.setItem("jobData", JSON.stringify({ ...jobInfo, plan }));
+      const formData = new FormData(e.target);
+      const jobData = {};
+      for(const [key, value] of formData.entries()) {
+        jobData[key] = value;
+      }
 
-      // redirect to Stripe payment based on plan
-      const stripeLink =
-        plan === "60"
-          ? "https://buy.stripe.com/test_30DAY_LINK" // 🔁 replace with real 60-day link
-          : "https://buy.stripe.com/test_00wcN458kaXw7HrcDxco000"; // 30-day link you provided
+      // Save job data with plan info locally (for demo)
+      localStorage.setItem('jobData', JSON.stringify({
+        ...jobData,
+        price,
+        days,
+        maxPosts,
+        postedDate: new Date().toISOString()
+      }));
 
-      window.location.href = stripeLink;
+      // Redirect to payment link based on price
+      const stripeLinks = {
+        "15": "https://buy.stripe.com/test_00wcN458kaXw7HrcDxco000",
+        "30": "https://buy.stripe.com/test_30DAY_LINK" // Replace with your real 30$ Stripe link
+      };
+
+      window.location.href = stripeLinks[price] || stripeLinks["15"];
     });
   </script>
+
 </body>
 </html>
