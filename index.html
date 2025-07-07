@@ -4,37 +4,80 @@
   <meta charset="UTF-8" />
   <title>Job Board</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #eef2f7; margin: 0; }
-    header { background: url('') center/cover no-repeat, #0047ab; height: 200px; display: flex; align-items: center; justify-content: center; color: white; }
-    h1 { text-shadow: 0 1px 3px rgba(0,0,0,0.5); }
-    .controls { position: absolute; top: 20px; right: 20px; }
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: #f3f6fb;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+    header {
+      background: #0047ab url('https://source.unsplash.com/featured/1200x300/?office,work') center/cover no-repeat;
+      height: 250px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      position: relative;
+      text-shadow: 0 2px 5px rgba(0,0,0,0.4);
+    }
+    header h1 {
+      font-size: 2.5em;
+      margin: 0;
+    }
+    .controls {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
     .controls button {
       margin-left: 10px;
-      background: #fff;
+      background: white;
       color: #0047ab;
       border: 2px solid #0047ab;
       border-radius: 4px;
-      padding: 8px 12px;
+      padding: 8px 14px;
       cursor: pointer;
       font-weight: bold;
-      transition: background 0.3s;
+      transition: 0.3s;
     }
-    .controls button:hover { background: #0047ab; color: white; }
-    #job-list { padding: 20px; max-width: 800px; margin: auto; }
-    .job { background: white; padding: 15px; margin-bottom: 15px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-    .job strong { color: #0047ab; font-size: 1.2em; }
-    .job em { color: #666; }
+    .controls button:hover {
+      background: #0047ab;
+      color: white;
+    }
+    #job-list {
+      padding: 30px 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+    .job {
+      background: white;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .job strong {
+      display: block;
+      font-size: 1.2em;
+      color: #0047ab;
+      margin-bottom: 6px;
+    }
+    .job em {
+      color: #666;
+      font-style: normal;
+    }
   </style>
 </head>
 <body>
   <header>
     <h1>Job Board</h1>
     <div class="controls">
-      <button onclick="choosePlan(30)">Post a Job</button>
-      <button onclick="showPricing()">Pricing</button>
+      <button onclick="window.location.href='post.html?plan=30'">Post a Job</button>
+      <button onclick="alert('Plans:\\n$15 – 30 days\\n$30 – 60 days')">Pricing</button>
     </div>
   </header>
-  
+
   <div id="job-list">Loading jobs...</div>
 
   <script>
@@ -42,29 +85,18 @@
     async function loadJobs() {
       try {
         const res = await fetch(`${BACKEND_URL}/jobs`);
-        let jobs = await res.json();
-        const now = new Date();
-        jobs = jobs.filter(job => new Date(job.expiresAt) > now);
-        const html = jobs.length
-          ? jobs.map(j => `
-              <div class="job">
-                <strong>${j.title}</strong><br/>
-                <em>${j.company}</em><p>${j.description}</p>
-              </div>
-            `).join('')
-          : '<p>No active jobs posted yet.</p>';
-        document.getElementById('job-list').innerHTML = html;
+        const jobs = (await res.json()).filter(job => new Date(job.expiresAt) > new Date());
+        const container = document.getElementById('job-list');
+        if (!jobs.length) return container.innerHTML = '<p>No active jobs posted yet.</p>';
+        container.innerHTML = jobs.map(j => `
+          <div class="job">
+            <strong>${j.title}</strong>
+            <em>${j.company}</em>
+            <p>${j.description}</p>
+          </div>`).join('');
       } catch {
         document.getElementById('job-list').innerText = 'Error loading job listings.';
       }
-    }
-    function showPricing() {
-      alert('Plans:\n\n$15 — 30 days job posting\n$30 — 60 days job posting');
-    }
-    function choosePlan(days) {
-      const price = (days === 30) ? 15 : 30;
-      // Redirect to Stripe checkout for the selected plan
-      window.location.href = `https://buy.stripe.com/test_..._${days}`;
     }
     loadJobs();
   </script>
