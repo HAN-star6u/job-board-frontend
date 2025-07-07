@@ -18,7 +18,7 @@
       text-align: center;
       margin-bottom: 50px;
     }
-    /* Pricing button top right */
+
     #pricing-container {
       position: fixed;
       top: 15px;
@@ -45,17 +45,24 @@
       border-radius: 8px;
       box-shadow: 0 3px 10px rgba(0,0,0,0.2);
       white-space: nowrap;
-      font-weight: normal;
       font-size: 0.9em;
-      user-select: none;
-      min-width: 160px;
+      min-width: 200px;
     }
-    /* Show popup when active */
     #pricing-popup.show {
       display: block;
     }
+    .price-option {
+      display: block;
+      background: #0047ab;
+      color: white;
+      padding: 10px;
+      margin-top: 10px;
+      text-align: center;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+    }
 
-    /* The rest of your styles... */
     #job-list > div {
       background: white;
       padding: 15px;
@@ -71,73 +78,44 @@
       color: #666;
       font-style: normal;
     }
-    button.post-job {
-      background-color: #0047ab;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      font-size: 1em;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      display: block;
-      margin: 0 auto;
-      margin-top: 20px;
-    }
-    button.post-job:hover {
-      background-color: #002f6c;
-    }
-    a {
-      display: block;
-      text-align: center;
-      margin-top: 20px;
-      text-decoration: none;
-    }
   </style>
 </head>
 <body>
   <div id="pricing-container">
-    <button id="pricing-button" aria-expanded="false" aria-controls="pricing-popup" aria-haspopup="true">Pricing</button>
-    <div id="pricing-popup" role="region" aria-live="polite">
-      $15 for 30 days<br />
-      $30 for 60 days
+    <button id="pricing-button">Pricing & Post a Job</button>
+    <div id="pricing-popup">
+      <p><strong>Select a plan:</strong></p>
+      <a class="price-option" href="https://buy.stripe.com/test_15for30">Pay $15 for 30 days</a>
+      <a class="price-option" href="https://buy.stripe.com/test_30for60">Pay $30 for 60 days</a>
     </div>
   </div>
 
   <h1>Job Board</h1>
   <div id="job-list">Loading jobs...</div>
 
-  <a href="post.html">
-    <button class="post-job">Post a Job</button>
-  </a>
-
   <script>
-    // Toggle pricing popup visibility
     const pricingBtn = document.getElementById("pricing-button");
     const pricingPopup = document.getElementById("pricing-popup");
 
     pricingBtn.addEventListener("click", () => {
-      const isVisible = pricingPopup.classList.toggle("show");
-      pricingBtn.setAttribute("aria-expanded", isVisible);
+      pricingPopup.classList.toggle("show");
     });
 
-    // Optional: Close popup if clicked outside
     document.addEventListener("click", (e) => {
       if (!pricingBtn.contains(e.target) && !pricingPopup.contains(e.target)) {
         pricingPopup.classList.remove("show");
-        pricingBtn.setAttribute("aria-expanded", false);
       }
     });
 
-    // Your existing loadJobs() code below...
+    // Load jobs
     const BACKEND_URL = "https://your-backend-url.onrender.com";
 
     async function loadJobs() {
       try {
         const res = await fetch(`${BACKEND_URL}/jobs`);
         let jobs = await res.json();
-
         const now = new Date();
+
         jobs = jobs.filter(job => new Date(job.expiresAt) > now);
 
         const container = document.getElementById("job-list");
@@ -153,8 +131,8 @@
           </div>
         `).join("");
       } catch (err) {
-        document.getElementById("job-list").innerHTML = "<p>Error loading jobs.</p>";
         console.error(err);
+        document.getElementById("job-list").innerHTML = "<p>Error loading jobs.</p>";
       }
     }
 
