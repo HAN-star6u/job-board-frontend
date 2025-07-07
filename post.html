@@ -4,26 +4,53 @@
   <meta charset="UTF-8" />
   <title>Post a Job</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #eef2f7; margin: 0; padding: 20px; }
-    form { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: #eef3f9;
+      padding: 20px;
+      margin: 0;
+      color: #333;
+    }
+    form {
+      max-width: 600px;
+      margin: 40px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
     input, textarea, select {
-      width: 100%; padding: 10px; margin-bottom: 15px;
-      border: 1px solid #ccc; border-radius: 4px; font-size: 1em;
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1em;
+      box-sizing: border-box;
     }
     button[type="submit"] {
-      width: 100%; background: #0047ab; color: white;
-      border: none; padding: 12px; font-size: 1.1em;
-      border-radius: 5px; cursor: pointer;
+      width: 100%;
+      background: #0047ab;
+      color: white;
+      border: none;
+      padding: 14px;
+      font-size: 1.1em;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s;
     }
-    button[type="submit"]:hover { background: #002f6c; }
+    button[type="submit"]:hover {
+      background: #002f6c;
+    }
+    h1 { text-align: center; color: #0047ab; margin-top: 0; }
   </style>
 </head>
 <body>
-  <h1 style="text-align: center;">Post Your Job</h1>
+  <h1>Post Your Job</h1>
   <form id="job-form">
     <select name="planDays" required>
-      <option value="30">30 days — $15</option>
-      <option value="60">60 days — $30</option>
+      <option value="30">30 days – $15</option>
+      <option value="60">60 days – $30</option>
     </select>
     <input type="text" name="title" placeholder="Job Title" required>
     <input type="text" name="company" placeholder="Company Name" required>
@@ -31,13 +58,13 @@
     <input type="email" name="email" placeholder="Email Address" required>
     <input type="text" name="zip" placeholder="ZIP Code" required>
     <input type="text" name="address" placeholder="Street Address" required>
-    <textarea name="description" placeholder="Job Description" required></textarea>
+    <textarea name="description" placeholder="Job Description" rows="5" required></textarea>
     <button type="submit">Submit Job</button>
   </form>
 
   <script>
     const BACKEND_URL = "https://your-backend-url.onrender.com";
-    document.getElementById('job-form').addEventListener('submit', async (e) => {
+    document.getElementById('job-form').addEventListener('submit', async e => {
       e.preventDefault();
       const f = e.target;
       const plan = parseInt(f.planDays.value, 10);
@@ -49,10 +76,11 @@
         zip: f.zip.value.trim(),
         address: f.address.value.trim(),
         description: f.description.value.trim(),
-        expiresAt: new Date(Date.now() + plan * 24 * 60 * 60 * 1000).toISOString()
+        expiresAt: new Date(Date.now() + plan*24*60*60*1000).toISOString()
       };
       const res = await fetch(`${BACKEND_URL}/jobs`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        method: 'POST',
+        headers: { 'Content-Type':'application/json'},
         body: JSON.stringify(jobData)
       });
       if (res.ok) window.location.href = 'success.html';
