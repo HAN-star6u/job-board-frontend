@@ -18,19 +18,44 @@
       text-align: center;
       margin-bottom: 50px;
     }
-    #pricing-badge {
+    /* Pricing button top right */
+    #pricing-container {
       position: fixed;
       top: 15px;
       right: 15px;
+      z-index: 1000;
+    }
+    #pricing-button {
       background: #0047ab;
       color: white;
+      border: none;
       padding: 10px 15px;
       border-radius: 8px;
       font-weight: bold;
+      cursor: pointer;
       font-size: 0.95em;
       box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-      z-index: 1000;
     }
+    #pricing-popup {
+      display: none;
+      margin-top: 8px;
+      background: white;
+      color: #0047ab;
+      padding: 12px 18px;
+      border-radius: 8px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+      white-space: nowrap;
+      font-weight: normal;
+      font-size: 0.9em;
+      user-select: none;
+      min-width: 160px;
+    }
+    /* Show popup when active */
+    #pricing-popup.show {
+      display: block;
+    }
+
+    /* The rest of your styles... */
     #job-list > div {
       background: white;
       padding: 15px;
@@ -46,7 +71,7 @@
       color: #666;
       font-style: normal;
     }
-    button {
+    button.post-job {
       background-color: #0047ab;
       color: white;
       border: none;
@@ -59,7 +84,7 @@
       margin: 0 auto;
       margin-top: 20px;
     }
-    button:hover {
+    button.post-job:hover {
       background-color: #002f6c;
     }
     a {
@@ -71,16 +96,40 @@
   </style>
 </head>
 <body>
-  <div id="pricing-badge">Pricing: $15 for 30 days | $30 for 60 days</div>
+  <div id="pricing-container">
+    <button id="pricing-button" aria-expanded="false" aria-controls="pricing-popup" aria-haspopup="true">Pricing</button>
+    <div id="pricing-popup" role="region" aria-live="polite">
+      $15 for 30 days<br />
+      $30 for 60 days
+    </div>
+  </div>
 
   <h1>Job Board</h1>
   <div id="job-list">Loading jobs...</div>
 
   <a href="post.html">
-    <button>Post a Job</button>
+    <button class="post-job">Post a Job</button>
   </a>
 
   <script>
+    // Toggle pricing popup visibility
+    const pricingBtn = document.getElementById("pricing-button");
+    const pricingPopup = document.getElementById("pricing-popup");
+
+    pricingBtn.addEventListener("click", () => {
+      const isVisible = pricingPopup.classList.toggle("show");
+      pricingBtn.setAttribute("aria-expanded", isVisible);
+    });
+
+    // Optional: Close popup if clicked outside
+    document.addEventListener("click", (e) => {
+      if (!pricingBtn.contains(e.target) && !pricingPopup.contains(e.target)) {
+        pricingPopup.classList.remove("show");
+        pricingBtn.setAttribute("aria-expanded", false);
+      }
+    });
+
+    // Your existing loadJobs() code below...
     const BACKEND_URL = "https://your-backend-url.onrender.com";
 
     async function loadJobs() {
