@@ -11,7 +11,21 @@
       max-width: 600px;
       margin: 50px auto;
       padding: 20px;
+      position: relative;
       text-align: center;
+    }
+    #pricing-badge {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      background: #0047ab;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 0.95em;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      z-index: 1000;
     }
     a {
       color: #0047ab;
@@ -24,6 +38,8 @@
   </style>
 </head>
 <body>
+  <div id="pricing-badge">Pricing: $15 for 30 days | $30 for 60 days</div>
+
   <h1>Job Submitted Successfully!</h1>
   <p>Your job has been posted and will remain live for 30 days.</p>
   <a href="index.html">← Back to Job Listings</a>
