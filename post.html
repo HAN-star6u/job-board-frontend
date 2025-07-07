@@ -11,10 +11,25 @@
       max-width: 600px;
       margin: 30px auto;
       padding: 20px;
+      position: relative;
+    }
+    #pricing-badge {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      background: #0047ab;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 0.95em;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      z-index: 1000;
     }
     h1 {
       color: #0047ab;
       text-align: center;
+      margin-bottom: 30px;
     }
     form {
       background: white;
@@ -48,6 +63,8 @@
   </style>
 </head>
 <body>
+  <div id="pricing-badge">Pricing: $15 for 30 days | $30 for 60 days</div>
+
   <h1>Submit a Job</h1>
   <form id="job-form">
     <input type="text" name="title" placeholder="Job Title" required />
@@ -61,7 +78,7 @@
   </form>
 
   <script>
-    const BACKEND_URL = "postgresql://hjobs_user:3vgp9XDEUiMk5r3QGid9KxD0X0038ewW@dpg-d1lehsur433s73dl50hg-a.oregon-postgres.render.com/hjobs";
+    const BACKEND_URL = "https://your-backend-url.onrender.com";
 
     document.getElementById("job-form").addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -75,7 +92,6 @@
         areaCode: form.areaCode.value.trim(),
         email: form.email.value.trim(),
         description: form.description.value.trim(),
-        // Set expiration date 30 days from now
         expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
       };
 
@@ -95,6 +111,10 @@
         console.error(err);
         alert("Error submitting the job.");
       }
+    });
+  </script>
+</body>
+</html>
     });
   </script>
 </body>
