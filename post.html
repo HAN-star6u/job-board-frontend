@@ -4,108 +4,59 @@
   <meta charset="UTF-8" />
   <title>Post a Job</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f9fbff;
-      color: #333;
-      max-width: 600px;
-      margin: 30px auto;
-      padding: 20px;
-      position: relative;
+    body { font-family: Arial, sans-serif; background: #eef2f7; margin: 0; padding: 20px; }
+    form { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    input, textarea, select {
+      width: 100%; padding: 10px; margin-bottom: 15px;
+      border: 1px solid #ccc; border-radius: 4px; font-size: 1em;
     }
-
-    h1 {
-      color: #0047ab;
-      text-align: center;
-      margin-bottom: 30px;
+    button[type="submit"] {
+      width: 100%; background: #0047ab; color: white;
+      border: none; padding: 12px; font-size: 1.1em;
+      border-radius: 5px; cursor: pointer;
     }
-
-    form {
-      background: white;
-      padding: 20px;
-      border-radius: 6px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
-    input, textarea {
-      width: 100%;
-      padding: 8px 10px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 1em;
-      box-sizing: border-box;
-    }
-
-    button {
-      width: 100%;
-      background-color: #0047ab;
-      color: white;
-      border: none;
-      padding: 12px;
-      font-size: 1.1em;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    #plan-note {
-      text-align: center;
-      margin-bottom: 10px;
-      color: #0047ab;
-    }
+    button[type="submit"]:hover { background: #002f6c; }
   </style>
 </head>
 <body>
-  <h1>Post Your Job</h1>
-  <p id="plan-note">Loading plan details...</p>
-
+  <h1 style="text-align: center;">Post Your Job</h1>
   <form id="job-form">
-    <input type="text" name="title" placeholder="Job Title" required />
-    <input type="text" name="company" placeholder="Company Name" required />
-    <input type="number" name="age" placeholder="Your Age" min="18" required />
-    <input type="tel" name="phone" placeholder="Telephone Number" required />
-    <input type="text" name="areaCode" placeholder="Area Code (for Address)" required />
-    <input type="email" name="email" placeholder="Email Address" required />
+    <select name="planDays" required>
+      <option value="30">30 days — $15</option>
+      <option value="60">60 days — $30</option>
+    </select>
+    <input type="text" name="title" placeholder="Job Title" required>
+    <input type="text" name="company" placeholder="Company Name" required>
+    <input type="tel" name="phone" placeholder="Phone Number" required>
+    <input type="email" name="email" placeholder="Email Address" required>
+    <input type="text" name="zip" placeholder="ZIP Code" required>
+    <input type="text" name="address" placeholder="Street Address" required>
     <textarea name="description" placeholder="Job Description" required></textarea>
     <button type="submit">Submit Job</button>
   </form>
 
   <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const plan = parseInt(urlParams.get("plan")) || 30;
-
-    const planNote = document.getElementById("plan-note");
-    planNote.textContent = `You selected the $${plan === 30 ? "15" : "30"} plan — Job will expire in ${plan} days.`;
-
-    const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + plan);
-
-    document.getElementById("job-form").addEventListener("submit", async (e) => {
+    const BACKEND_URL = "https://your-backend-url.onrender.com";
+    document.getElementById('job-form').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const form = e.target;
-
+      const f = e.target;
+      const plan = parseInt(f.planDays.value, 10);
       const jobData = {
-        title: form.title.value,
-        company: form.company.value,
-        age: parseInt(form.age.value, 10),
-        phone: form.phone.value,
-        areaCode: form.areaCode.value,
-        email: form.email.value,
-        description: form.description.value,
-        expiresAt: expiresAt.toISOString()
+        title: f.title.value.trim(),
+        company: f.company.value.trim(),
+        phone: f.phone.value.trim(),
+        email: f.email.value.trim(),
+        zip: f.zip.value.trim(),
+        address: f.address.value.trim(),
+        description: f.description.value.trim(),
+        expiresAt: new Date(Date.now() + plan * 24 * 60 * 60 * 1000).toISOString()
       };
-
-      const res = await fetch("https://your-backend-url.onrender.com/jobs", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch(`${BACKEND_URL}/jobs`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(jobData)
       });
-
-      if (res.ok) {
-        window.location.href = "success.html";
-      } else {
-        alert("Error submitting job.");
-      }
+      if (res.ok) window.location.href = 'success.html';
+      else alert('Failed to post job.');
     });
   </script>
 </body>
