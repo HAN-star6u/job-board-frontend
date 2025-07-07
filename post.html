@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Post a Job</title>
+</head>
+<body>
+  <h1>Submit a Job</h1>
+  <form id="job-form">
+    <input type="text" name="title" placeholder="Job Title" required><br><br>
+    <input type="text" name="company" placeholder="Company Name" required><br><br>
+    <textarea name="description" placeholder="Job Description" required></textarea><br><br>
+    <button type="submit">Submit</button>
+  </form>
+
+  <script>
+    const BACKEND_URL = "https://your-backend-url.onrender.com";
+
+    document.getElementById("job-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const form = e.target;
+      const jobData = {
+        title: form.title.value,
+        company: form.company.value,
+        description: form.description.value,
+        expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString() // 30 days from now
+      };
+
+      try {
+        const res = await fetch(`${BACKEND_URL}/jobs`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(jobData)
+        });
+
+        if (res.ok) {
+          window.location.href = "success.html";
+        } else {
+          alert("Error posting job. Please try again.");
+        }
+      } catch (err) {
+        console.error("Error:", err);
+        alert("An unexpected error occurred.");
+      }
+    });
+  </script>
+</body>
+</html>
