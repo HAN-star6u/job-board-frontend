@@ -2,63 +2,82 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Pricing</title>
+  <title>Pricing - Green Job Board</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #eef2f8;
-      padding: 40px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f4f9f4;
+      padding: 40px 20px;
       text-align: center;
+      color: #2c7a2c;
+    }
+    h1 {
+      margin-bottom: 30px;
+    }
+    .plans {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
     }
     .plan {
       background: white;
-      border-radius: 8px;
       padding: 30px;
-      margin: 20px auto;
-      max-width: 400px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      width: 280px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .plan:hover {
+      transform: scale(1.05);
     }
     .plan h2 {
-      color: #0047ab;
+      margin-bottom: 15px;
+      font-size: 2rem;
     }
     .plan p {
-      font-size: 1em;
-      color: #444;
-      margin: 20px 0;
+      font-size: 1.1rem;
+      margin-bottom: 20px;
     }
     .plan button {
-      padding: 12px 20px;
-      font-size: 1em;
-      background: #0047ab;
-      color: white;
+      background: #2c7a2c;
       border: none;
-      border-radius: 6px;
+      color: white;
+      padding: 12px 25px;
+      font-size: 1rem;
+      border-radius: 8px;
       cursor: pointer;
+      transition: background 0.3s;
     }
     .plan button:hover {
-      background: #002d6d;
+      background: #1b4c1b;
     }
   </style>
 </head>
 <body>
-  <h1>Choose a Job Posting Plan</h1>
 
-  <div class="plan">
-    <h2>$15 for 30 Days</h2>
-    <p>Post 1 job listing that expires after 30 days.</p>
-    <button onclick="startForm(30)">Select</button>
-  </div>
+  <h1>Choose Your Job Posting Plan</h1>
 
-  <div class="plan">
-    <h2>$30 for 60 Days</h2>
-    <p>Post a job that lasts 60 days and may include more features later.</p>
-    <button onclick="startForm(60)">Select</button>
+  <div class="plans">
+    <div class="plan">
+      <h2>$15</h2>
+      <p>Post 1 job listing for 30 days.</p>
+      <button onclick="startForm(15, 30, 1)">Select Plan</button>
+    </div>
+
+    <div class="plan">
+      <h2>$30</h2>
+      <p>Post 2 job listings for 60 days.</p>
+      <button onclick="startForm(30, 60, 2)">Select Plan</button>
+    </div>
   </div>
 
   <script>
-    function startForm(days) {
-      window.location.href = `form.html?plan=${days}`;
+    function startForm(price, days, maxPosts) {
+      window.location.href = `form.html?price=${price}&days=${days}&maxPosts=${maxPosts}`;
     }
   </script>
+
 </body>
 </html>
