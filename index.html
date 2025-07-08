@@ -4,105 +4,15 @@
   <meta charset="UTF-8" />
   <title>Green Job Board</title>
   <style>
-    body, h1, h2, p, ul {
-      margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    body {
-      background: #f4f9f4;
-      color: #333;
-      line-height: 1.6;
-    }
-    a {
-      color: #2c7a2c;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-
-    /* Navbar */
-    nav {
-      background: #2c7a2c;
-      color: white;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 30px;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-    nav .logo {
-      font-weight: bold;
-      font-size: 1.5rem;
-    }
-    nav .nav-links {
-      display: flex;
-      gap: 10px;
-    }
-    nav .nav-links button {
-      background: transparent;
-      border: 1.5px solid white;
-      color: white;
-      padding: 8px 15px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: background 0.3s;
-    }
-    nav .nav-links button:hover {
-      background: white;
-      color: #2c7a2c;
-    }
-
-    .container {
-      max-width: 900px;
-      margin: 40px auto;
-      padding: 0 20px;
-    }
-
-    .job-card {
-      background: white;
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-    .job-card h2 {
-      color: #2c7a2c;
-      margin-bottom: 5px;
-    }
-    .job-card p {
-      margin-bottom: 5px;
-    }
-    .job-card .company {
-      font-weight: bold;
-      margin-bottom: 8px;
-    }
-    .job-card .job-desc {
-      font-style: italic;
-      color: #555;
-    }
-
-    footer {
-      text-align: center;
-      padding: 15px 0;
-      background: #e0f0e0;
-      margin-top: 50px;
-      color: #555;
-    }
+    /* [Your existing styles here...] */
   </style>
 </head>
 <body>
 
   <nav>
     <div class="logo">Green Job Board</div>
-    <div class="nav-links">
-      <button onclick="window.location.href='pricing.html'">Pricing</button>
-      <button onclick="handlePostJob()">Post a Job</button>
-      <button onclick="window.location.href='login.html'">Login</button>
-      <button onclick="window.location.href='register.html'">Register</button>
-      <button onclick="logout()">Logout</button>
+    <div class="nav-links" id="nav-links">
+      <!-- Buttons will be injected dynamically -->
     </div>
   </nav>
 
@@ -113,73 +23,43 @@
     </div>
   </div>
 
-  <footer>
-    &copy; 2025 Green Job Board. All rights reserved.
-  </footer>
+  <footer>&copy; 2025 Green Job Board. All rights reserved.</footer>
 
   <script>
-    // Fake job data - replace with fetch later
+    // Simulated job data
     const jobs = [
-      {
-        company: "Green Energy Inc.",
-        title: "Solar Panel Technician",
-        skills: "Installation, Maintenance",
-        type: "Remote",
-        location: "California",
-        desc: "Looking for experienced solar panel technicians to join our team.",
-        posted: "2025-07-01"
-      },
-      {
-        company: "Eco Builders",
-        title: "Sustainable Architect",
-        skills: "Design, CAD, LEED Certification",
-        type: "In person",
-        location: "New York",
-        desc: "Seeking architects passionate about sustainable building designs.",
-        posted: "2025-07-03"
-      }
+      /* ...existing demo data... */
     ];
 
+    // Load jobs
     function loadJobs() {
-      const container = document.getElementById('jobs-list');
-      container.innerHTML = '';
-
-      if (jobs.length === 0) {
-        container.innerHTML = '<p>No jobs posted yet.</p>';
-        return;
-      }
-
-      jobs.forEach(job => {
-        const jobCard = document.createElement('div');
-        jobCard.className = 'job-card';
-        jobCard.innerHTML = `
-          <h2>${job.title}</h2>
-          <div class="company">${job.company} - ${job.location} (${job.type})</div>
-          <p><strong>Skills:</strong> ${job.skills}</p>
-          <p class="job-desc">${job.desc}</p>
-          <small>Posted on: ${new Date(job.posted).toLocaleDateString()}</small>
-        `;
-        container.appendChild(jobCard);
-      });
+      /* ...existing loadJobs logic... */
     }
 
-    function handlePostJob() {
-      const isLoggedIn = localStorage.getItem('loggedIn') === 'true';
-      if (isLoggedIn) {
-        window.location.href = 'form.html';
+    // Render navbar based on login state
+    function renderNavbar() {
+      const nav = document.getElementById('nav-links');
+      nav.innerHTML = '';
+      const loggedIn = localStorage.getItem('loggedIn') === 'true';
+
+      nav.innerHTML += `<button onclick="location.href='pricing.html'">Pricing</button>`;
+      nav.innerHTML += `<button onclick="${loggedIn ? "location.href='form.html'" : "location.href='register.html'"}">Post a Job</button>`;
+      if (!loggedIn) {
+        nav.innerHTML += `<button onclick="location.href='login.html'">Login</button>`;
+        nav.innerHTML += `<button onclick="location.href='register.html'">Register</button>`;
       } else {
-        window.location.href = 'register.html';
+        nav.innerHTML += `<button onclick="logout()">Logout</button>`;
       }
     }
 
     function logout() {
       localStorage.removeItem('loggedIn');
-      alert("You have been logged out.");
       location.reload();
     }
 
+    // Initialize page
+    renderNavbar();
     loadJobs();
   </script>
-
 </body>
 </html>
