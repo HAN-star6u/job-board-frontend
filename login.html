@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login - Green Job Board</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f4f9f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .form-container {
+      background: white;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+    h2 {
+      color: #2c7a2c;
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      margin-top: 25px;
+      width: 100%;
+      background: #2c7a2c;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #1b4c1b;
+    }
+    .bottom-text {
+      margin-top: 15px;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+    .bottom-text a {
+      color: #2c7a2c;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-container">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <label>Email</label>
+      <input type="email" name="email" required />
+
+      <label>Password</label>
+      <input type="password" name="password" required />
+
+      <button type="submit">Login</button>
+    </form>
+
+    <div class="bottom-text">
+      Don’t have an account? <a href="register.html">Register</a>
+    </div>
+  </div>
+
+</body>
+</html>
