@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <title>Green Job Board</title>
   <style>
-    /* Reset & base */
     body, h1, h2, p, ul {
       margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
@@ -37,12 +36,15 @@
       font-weight: bold;
       font-size: 1.5rem;
     }
+    nav .nav-links {
+      display: flex;
+      gap: 10px;
+    }
     nav .nav-links button {
       background: transparent;
       border: 1.5px solid white;
       color: white;
       padding: 8px 15px;
-      margin-left: 10px;
       border-radius: 5px;
       cursor: pointer;
       font-size: 1rem;
@@ -53,14 +55,12 @@
       color: #2c7a2c;
     }
 
-    /* Container */
     .container {
       max-width: 900px;
       margin: 40px auto;
       padding: 0 20px;
     }
 
-    /* Job Listing Card */
     .job-card {
       background: white;
       border-radius: 8px;
@@ -84,7 +84,6 @@
       color: #555;
     }
 
-    /* Footer */
     footer {
       text-align: center;
       padding: 15px 0;
@@ -101,13 +100,14 @@
     <div class="nav-links">
       <button onclick="window.location.href='pricing.html'">Pricing</button>
       <button onclick="window.location.href='form.html'">Post a Job</button>
+      <button onclick="window.location.href='login.html'">Login</button>
+      <button onclick="window.location.href='register.html'">Register</button>
     </div>
   </nav>
 
   <div class="container">
     <h1>Latest Job Listings</h1>
     <div id="jobs-list">
-      <!-- Job cards will be loaded here -->
       <p>Loading jobs...</p>
     </div>
   </div>
