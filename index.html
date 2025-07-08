@@ -99,9 +99,10 @@
     <div class="logo">Green Job Board</div>
     <div class="nav-links">
       <button onclick="window.location.href='pricing.html'">Pricing</button>
-      <button onclick="window.location.href='form.html'">Post a Job</button>
+      <button onclick="handlePostJob()">Post a Job</button>
       <button onclick="window.location.href='login.html'">Login</button>
       <button onclick="window.location.href='register.html'">Register</button>
+      <button onclick="logout()">Logout</button>
     </div>
   </nav>
 
@@ -117,7 +118,7 @@
   </footer>
 
   <script>
-    // Placeholder jobs for demo - replace with backend fetch later
+    // Fake job data - replace with fetch later
     const jobs = [
       {
         company: "Green Energy Inc.",
@@ -160,6 +161,21 @@
         `;
         container.appendChild(jobCard);
       });
+    }
+
+    function handlePostJob() {
+      const isLoggedIn = localStorage.getItem('loggedIn') === 'true';
+      if (isLoggedIn) {
+        window.location.href = 'form.html';
+      } else {
+        window.location.href = 'register.html';
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('loggedIn');
+      alert("You have been logged out.");
+      location.reload();
     }
 
     loadJobs();
